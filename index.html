@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آموزش توابع پرکاربرد در اکسل</title>
+    
+    <!-- ===== PWA MANIFEST ===== -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#1d6f42">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- ===== FONT LOCAL WITH FALLBACK ===== -->
+    <link rel="preload" href="./Vazirmatn.woff2" as="font" type="font/woff2" crossorigin>
+    <style>
+        /* ===== فونت ===== */
+        @font-face {
+            font-family: 'Vazir';
+            src: local('Vazir'), url('./Vazirmatn.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Vazir';
+            src: local('Vazir'), url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); transition: all 0.4s ease; min-height: 100vh; direction: rtl; padding: 0; }
+
+        /* ===== THEME VARIABLES ===== */
+        :root, [data-theme="professional"] {
+            --bg: #f7fafc; --text: #2d3748; --card-bg: #ffffff; --card-border: #e2e8f0;
+            --card-shadow: 0 4px 20px rgba(29, 111, 66, 0.10);
+            --header-bg: linear-gradient(145deg, #1d6f42, #145a33); --header-text: #ffffff;
+            --input-bg: #ffffff; --input-border: #cbd5e0; --input-text: #2d3748;
+            --accent: #1d6f42; --accent-light: #e8f5ee; --accent-dark: #145a33; --accent-hover: #48bb78;
+            --tag-bg: #edf2f7; --tag-active: #1d6f42; --tag-active-text: #ffffff;
+            --shadow: 0 4px 16px rgba(29, 111, 66, 0.08); --radius: 14px;
+            --dropdown-bg: #ffffff; --dropdown-hover: #e8f5ee; --separator: #e2e8f0; --highlight: #fefcbf;
+            --table-header: #e8f5ee; --table-header-text: #1d6f42;
+            --example-header: #1d6f42; --example-header-text: #ffffff;
+            --step-bg: #e8f5ee; --step-border: #1d6f42;
+            --number-shadow: rgba(29, 111, 66, 0.15);
+            --badge-bg: #e8f5ee; --badge-text: #1d6f42; --sub-color: #718096;
+            --scrollbar-track: #edf2f7; --scrollbar-thumb: #cbd5e0; --scrollbar-thumb-hover: #a0aec0;
+            --toggle-bg: #e2e8f0; --toggle-dot: #ffffff; --toggle-active: #1d6f42;
+            --border-focus: #1d6f42; --placeholder: #a0aec0; --no-result: #a0aec0;
+            --data-header-bg: #1d6f42; --data-header-text: #ffffff;
+            --search-bg: #e8f0fe;
+            --code-bg: #f0f7f4; --code-border: #c5d9d0; --code-text: #1d6f42;
+            --highlight-color: #b91c1c;
+            --install-btn-bg: linear-gradient(145deg, #064e3b, #0d7a4a, #1d8f4e, #3ba35a, #65b86a);
+            --install-btn-text: #ffffff;
+            --install-btn-shadow: rgba(29, 111, 66, 0.35);
+        }
+        [data-theme="dark"] {
+            --bg: #0f172a; --text: #f1f5f9; --card-bg: #1e293b; --card-border: #334155;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            --header-bg: linear-gradient(145deg, #0d2e1a, #0a1f12); --header-text: #f1f5f9;
+            --input-bg: #1e293b; --input-border: #475569; --input-text: #f1f5f9;
+            --accent: #6ee7b7; --accent-light: #1e293b; --accent-dark: #48bb78; --accent-hover: #48bb78;
+            --tag-bg: #334155; --tag-active: #6ee7b7; --tag-active-text: #0f172a;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.5); --radius: 14px;
+            --dropdown-bg: #1e293b; --dropdown-hover: #334155; --separator: #475569; --highlight: #2d3748;
+            --table-header: #1a2a3a; --table-header-text: #6ee7b7;
+            --example-header: #1a2a3a; --example-header-text: #6ee7b7;
+            --step-bg: #1a2a3a; --step-border: #6ee7b7;
+            --number-shadow: rgba(0, 0, 0, 0.3);
+            --badge-bg: #334155; --badge-text: #a0aec0; --sub-color: #94a3b8;
+            --scrollbar-track: #1e293b; --scrollbar-thumb: #475569; --scrollbar-thumb-hover: #64748b;
+            --toggle-bg: #475569; --toggle-dot: #f1f5f9; --toggle-active: #6ee7b7;
+            --border-focus: #6ee7b7; --placeholder: #64748b; --no-result: #64748b;
+            --data-header-bg: #1a2a3a; --data-header-text: #6ee7b7;
+            --search-bg: #1a2744;
+            --code-bg: #1a2a3a; --code-border: #334155; --code-text: #6ee7b7;
+            --highlight-color: #f87171;
+            --install-btn-bg: linear-gradient(145deg, #064e3b, #0d7a4a, #1d8f4e, #3ba35a, #65b86a);
+            --install-btn-text: #ffffff;
+            --install-btn-shadow: rgba(29, 111, 66, 0.35);
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 20px; }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 20px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+        /* ===== HEADER ===== */
+        .header { position: sticky; top: 0; z-index: 1000; background: var(--header-bg); padding: 20px 32px 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: nowrap; box-shadow: 0 2px 16px rgba(0,0,0,0.15); backdrop-filter: blur(8px); }
+        .header-left { display: flex; flex-direction: column; padding-right: 8px; }
+        .header-title { font-size: 2rem; font-weight: 400; color: var(--header-text); white-space: nowrap; letter-spacing: 0.5px; }
+        .header-title span { font-weight: 700; background: rgba(255,255,255,0.15); padding: 2px 12px; border-radius: 20px; font-size: 0.85rem; }
+        .header-version { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 2px; letter-spacing: 0.3px; font-weight: 500; }
+        .header-controls { display: flex; align-items: center; gap: 16px; margin-right: auto; flex-shrink: 0; }
+
+        .theme-toggle { position: relative; width: 52px; height: 28px; background: var(--toggle-bg); border-radius: 50px; cursor: pointer; transition: all 0.4s ease; border: 2px solid var(--card-border); flex-shrink: 0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.1); }
+        .theme-toggle::after { content: ''; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; background: var(--toggle-dot); border-radius: 50%; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        [data-theme="dark"] .theme-toggle { background: var(--toggle-active); border-color: var(--toggle-active); }
+        [data-theme="dark"] .theme-toggle::after { right: 26px; background: #ffffff; }
+        .theme-toggle:hover { transform: scale(1.05); }
+
+        /* ===== TOOLBAR ===== */
+        .toolbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 10px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+            position: sticky;
+            z-index: 999;
+            backdrop-filter: blur(8px);
+        }
+
+        .search-wrapper {
+            flex: 1 1 220px;
+            position: relative;
+            min-width: 120px;
+            max-width: 320px;
+        }
+        .search-wrapper .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--sub-color); font-size: 0.9rem; pointer-events: none; opacity: 0.6; }
+        .search-box { width: 100%; padding: 10px 42px 10px 16px; border-radius: var(--radius); border: 1px solid var(--input-border); background: var(--search-bg); color: var(--input-text); font-family: 'Vazir', sans-serif; font-size: 0.9rem; outline: none; transition: all 0.3s; height: 48px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .search-box:focus { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(29,111,66,0.12); }
+        .search-box::placeholder { color: var(--placeholder); text-align: right; }
+
+        /* ===== DROPDOWN & SORT & VIEW TOGGLE ===== */
+        .dropdown-wrapper, .sort-wrapper, .view-wrapper {
+            position: relative;
+            display: inline-block;
+            flex: 1 1 0;
+            min-width: 0;
+        }
+        .dropdown-btn, .sort-btn, .view-group {
+            height: 48px;
+            border-radius: var(--radius);
+            border: 1px solid var(--input-border);
+            background: var(--search-bg);
+            font-family: 'Vazir', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.25s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            position: relative;
+            white-space: nowrap;
+            width: 100%;
+            padding: 0;
+        }
+        .view-group {
+            padding: 4px;
+            gap: 4px;
+            background: var(--search-bg);
+            border: 1px solid var(--input-border);
+        }
+        .view-btn {
+            height: 100%;
+            flex: 1;
+            border: none;
+            background: transparent;
+            border-radius: calc(var(--radius) - 4px);
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--sub-color);
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+            font-weight: 400;
+            min-height: 36px;
+        }
+        .view-btn:hover {
+            background: var(--accent-light);
+            color: var(--text);
+        }
+        .view-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(29,111,66,0.2);
+        }
+        .view-btn .icon-label {
+            font-size: 0.6rem;
+            display: none;
+        }
+
+        .dropdown-btn .arrow-icon, .sort-btn .arrow-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .dropdown-btn:hover, .sort-btn:hover, .view-group:hover { border-color: var(--accent); background: var(--accent-light); }
+        .dropdown-btn:focus-visible, .sort-btn:focus-visible, .view-group:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+
+        .dropdown-menu, .sort-menu {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: var(--dropdown-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            width: auto;
+            min-width: 100%;
+            max-height: none;
+            height: auto;
+            overflow-y: visible;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            z-index: 100;
+            padding: 6px 0;
+        }
+        .dropdown-menu.open, .sort-menu.open { display: block; animation: dropdownFade 0.2s ease; }
+        @keyframes dropdownFade { 0% { opacity: 0; transform: translateY(-8px); } 100% { opacity: 1; transform: translateY(0); } }
+        .dropdown-item, .sort-item {
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: all 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            white-space: nowrap;
+        }
+        .dropdown-item:hover, .sort-item:hover { background: var(--dropdown-hover); }
+        .dropdown-item.active, .sort-item.active { background: var(--tag-active); color: var(--tag-active-text); }
+        .dropdown-item .count {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            background: var(--tag-bg);
+            padding: 1px 12px;
+            border-radius: 20px;
+            color: var(--sub-color);
+            font-weight: 400;
+            margin-right: auto;
+        }
+        .dropdown-item.active .count { background: rgba(255,255,255,0.2); color: var(--tag-active-text); }
+
+        /* ===== CARDS ===== */
+        .cards-container {
+            max-width: 1280px;
+            margin: 24px auto;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            transition: all 0.3s;
+        }
+        .cards-container.hidden { display: none; }
+
+        /* ===== LIST MODE ===== */
+        .cards-container.list-mode {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .cards-container.list-mode .card {
+            flex-direction: row;
+            justify-content: flex-start;
+            padding: 12px 20px;
+            min-height: 50px;
+            gap: 16px;
+            align-items: center;
+        }
+        .cards-container.list-mode .card .card-number {
+            position: relative;
+            top: auto;
+            right: auto;
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .cards-container.list-mode .card .en {
+            font-size: 1rem;
+        }
+        .cards-container.list-mode .card .fa {
+            font-size: 0.9rem;
+            margin-top: 0;
+        }
+        .cards-container.list-mode .card .separator {
+            display: none;
+        }
+        .cards-container.list-mode .card .badge {
+            margin-top: 0;
+            margin-right: auto;
+        }
+        .cards-container.list-mode .card .badge.special {
+            font-size: 0.7rem;
+            padding: 2px 12px;
+        }
+
+        /* ===== COMPACT MODE ===== */
+        .cards-container.compact-mode {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        .cards-container.compact-mode .card {
+            min-height: 80px;
+            padding: 12px 8px 10px;
+            padding-top: 26px;
+        }
+        .cards-container.compact-mode .card .en {
+            font-size: 1rem;
+        }
+        .cards-container.compact-mode .card .fa {
+            font-size: 0.8rem;
+        }
+        .cards-container.compact-mode .card .card-number {
+            width: 26px;
+            height: 26px;
+            font-size: 0.7rem;
+            top: -10px;
+            right: -8px;
+        }
+        .cards-container.compact-mode .card .badge.special {
+            font-size: 0.6rem;
+            padding: 2px 10px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 2px solid var(--card-border);
+            padding: 18px 12px 14px;
+            padding-top: 32px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+        }
+        .card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 40px rgba(29,111,66,0.15); border-color: var(--accent-hover); }
+        .card:focus-visible { outline: 3px solid var(--border-focus); outline-offset: 2px; }
+        .card-number {
+            position: absolute;
+            top: -12px;
+            right: -10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            border: 3px solid var(--card-bg);
+            box-shadow: 0 2px 12px var(--number-shadow);
+            transition: all 0.3s;
+            z-index: 2;
+            color: #2d3748;
+        }
+        .card:hover .card-number { transform: scale(1.15) rotate(8deg); }
+        [data-theme="professional"] .card-number.color-1 { background: linear-gradient(145deg, #fed7d7, #feb2b2); color: #742a2a; }
+        [data-theme="professional"] .card-number.color-2 { background: linear-gradient(145deg, #feebc8, #fbd38d); color: #744210; }
+        [data-theme="professional"] .card-number.color-3 { background: linear-gradient(145deg, #fefcbf, #faf089); color: #744210; }
+        [data-theme="professional"] .card-number.color-4 { background: linear-gradient(145deg, #c6f6d5, #9ae6b4); color: #22543d; }
+        [data-theme="professional"] .card-number.color-5 { background: linear-gradient(145deg, #bee3f8, #90cdf4); color: #2a4365; }
+        [data-theme="professional"] .card-number.color-6 { background: linear-gradient(145deg, #e9d8fd, #d6bcfa); color: #44337a; }
+        [data-theme="professional"] .card-number.color-7 { background: linear-gradient(145deg, #fed7e2, #fbb6ce); color: #702459; }
+        [data-theme="professional"] .card-number.color-8 { background: linear-gradient(145deg, #b2f5ea, #81e6d9); color: #234e52; }
+        [data-theme="dark"] .card-number { color: #fff; border-color: #1e293b; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .card-number.color-1 { background: linear-gradient(145deg, rgba(254,178,178,0.85), rgba(252,129,129,0.75)); border-color: #fc8181; }
+        [data-theme="dark"] .card-number.color-2 { background: linear-gradient(145deg, rgba(251,211,141,0.85), rgba(246,173,85,0.75)); border-color: #f6ad55; }
+        [data-theme="dark"] .card-number.color-3 { background: linear-gradient(145deg, rgba(250,240,137,0.85), rgba(236,201,75,0.75)); border-color: #ecc94b; }
+        [data-theme="dark"] .card-number.color-4 { background: linear-gradient(145deg, rgba(154,230,180,0.85), rgba(104,211,145,0.75)); border-color: #68d391; }
+        [data-theme="dark"] .card-number.color-5 { background: linear-gradient(145deg, rgba(144,205,244,0.85), rgba(99,179,237,0.75)); border-color: #63b3ed; }
+        [data-theme="dark"] .card-number.color-6 { background: linear-gradient(145deg, rgba(214,188,250,0.85), rgba(183,148,244,0.75)); border-color: #b794f4; }
+        [data-theme="dark"] .card-number.color-7 { background: linear-gradient(145deg, rgba(251,182,206,0.85), rgba(246,135,179,0.75)); border-color: #f687b3; }
+        [data-theme="dark"] .card-number.color-8 { background: linear-gradient(145deg, rgba(129,230,217,0.85), rgba(79,209,197,0.75)); border-color: #4fd1c5; }
+        .card .en { font-family: 'Courier New', monospace; font-size: 1.4rem; font-weight: 700; color: var(--text); direction: ltr; letter-spacing: 0.3px; }
+        .card .fa { font-size: 1.1rem; color: var(--text); line-height: 1.4; margin-top: 2px; }
+        .card .separator { width: 30%; height: 2px; background: var(--separator); margin: 6px auto; border-radius: 4px; transition: all 0.3s; }
+        .card:hover .separator { width: 50%; background: var(--accent-hover); }
+        .card .badge { margin-top: 4px; font-size: 0.5rem; background: var(--badge-bg); color: var(--badge-text); padding: 2px 12px; border-radius: 30px; font-weight: 600; letter-spacing: 0.5px; }
+        /* ===== تغییر: سایز فونت «ویژه» کوچک‌تر ===== */
+        .card .badge.special { background: linear-gradient(145deg, #f6ad55, #ed8936); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 12px; border-radius: 30px; }
+
+        .no-result { text-align: center; padding: 60px 20px; color: var(--no-result); font-size: 1.05rem; grid-column: 1 / -1; line-height: 2; }
+        .no-result .icon { font-size: 3rem; display: block; margin-bottom: 12px; }
+        .no-result .suggestion { font-size: 0.85rem; opacity: 0.7; margin-top: 4px; }
+
+        /* ===== DETAIL PAGE ===== */
+        .detail-page { display: none; max-width: 960px; margin: 0 auto; padding: 20px 20px 60px; animation: fadeIn 0.35s ease; }
+        .detail-page.active { display: block; }
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        .detail-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 8px 40px rgba(29,111,66,0.12);
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+        .detail-header .header-inner {
+            padding: 22px 24px;
+            background: linear-gradient(145deg, var(--accent), var(--accent-dark));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .detail-header .header-inner .en {
+            font-family: 'Courier New', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .detail-header .header-inner .fa {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
+        }
+        .detail-header .header-body {
+            padding: 14px 24px 18px;
+        }
+        .detail-header .header-body .sub {
+            font-size: 0.85rem;
+            color: var(--sub-color);
+            margin: 0;
+            text-align: right;
+        }
+
+        .detail-desc { background: var(--card-bg); padding: 20px 24px; border-radius: var(--radius); border: 1px solid var(--card-border); margin: 12px 0 20px; line-height: 2; font-size: 0.95rem; box-shadow: var(--shadow); text-align: justify; }
+        .detail-desc strong { color: var(--accent); }
+
+        .section-title { font-size: 1.1rem; font-weight: 700; margin-top: 28px; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .section-title .emoji { font-size: 1.2rem; }
+
+        .arg-table-wrap { overflow-x: auto; margin: 10px 0 6px; border-radius: var(--radius); border: 1px solid var(--card-border); background: var(--card-bg); box-shadow: var(--shadow); }
+        .arg-table { width: 100%; border-collapse: collapse; font-size: 1rem; min-width: 400px; }
+        .arg-table th { background: var(--table-header); color: var(--table-header-text); text-align: right; padding: 12px 16px; font-weight: 700; border-bottom: 2px solid var(--card-border); white-space: nowrap; }
+        .arg-table td { padding: 12px 16px; border-bottom: 1px solid var(--card-border); vertical-align: top; color: var(--text); }
+        .arg-table tr:last-child td { border-bottom: none; }
+        .arg-table .latin { font-family: 'Courier New', monospace; direction: ltr; color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+
+        .arg-notes { margin: 4px 0 18px; padding: 16px 20px; background: var(--input-bg); border-radius: var(--radius); border: 1px solid var(--card-border); font-size: 0.88rem; line-height: 2.2; box-shadow: var(--shadow); text-align: justify; }
+        .arg-notes .note-item strong { color: var(--accent); font-weight: 700; }
+        .arg-notes .note-item { padding: 4px 0; border-bottom: 1px solid var(--card-border); }
+        .arg-notes .note-item:last-child { border-bottom: none; }
+
+        .formula-box { background: var(--input-bg); padding: 14px 20px; border-radius: 10px; font-family: 'Courier New', monospace; direction: ltr; text-align: left; margin: 12px 0; border: 2px solid var(--card-border); overflow-x: auto; white-space: nowrap; font-size: 1.1rem; line-height: 2.2; font-weight: 700; color: var(--text); box-shadow: inset 0 2px 8px rgba(0,0,0,0.04); }
+        .formula-box .comment { direction: rtl; text-align: right; color: var(--sub-color); font-family: 'Vazir', sans-serif; font-size: 0.8rem; display: block; margin-top: 4px; }
+
+        .example-wrap { margin: 18px 0; border: 2px solid var(--card-border); border-radius: var(--radius); overflow: hidden; background: var(--card-bg); box-shadow: var(--shadow); transition: all 0.3s; }
+        .example-wrap:hover { border-color: var(--accent); }
+        .example-trigger { background: var(--example-header); color: var(--example-header-text); padding: 14px 20px; cursor: default; font-weight: 600; display: flex; justify-content: space-between; align-items: center; user-select: none; font-size: 0.95rem; border-bottom: 2px solid var(--card-border); }
+        .example-body { padding: 18px 20px 20px; display: block; line-height: 2; }
+
+        .excel-table-wrap { overflow-x: auto; margin: 8px 0 12px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--card-bg); }
+        .excel-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; direction: ltr; text-align: center; min-width: 280px; }
+        .excel-table th, .excel-table td { border: 1px solid var(--card-border); padding: 6px 12px; min-width: 40px; color: var(--text); }
+        .excel-table .col-header { background: var(--table-header); color: var(--table-header-text); font-weight: 700; }
+        .excel-table .row-header { background: var(--table-header); color: var(--table-header-text); font-weight: 700; width: 36px; min-width: 36px; max-width: 36px; }
+        .excel-table .data-header { background: var(--data-header-bg); color: var(--data-header-text); font-weight: 700; }
+        .excel-table .title-row { background: var(--example-header); color: var(--example-header-text); font-weight: 700; }
+        .excel-table .letter-row { background: var(--table-header); color: var(--table-header-text); font-weight: 700; font-size: 0.85rem; }
+        .excel-table .hash-row { background: var(--table-header); color: var(--table-header-text); font-weight: 700; font-size: 0.85rem; }
+        .excel-table .highlight { background: var(--accent-light); font-weight: 600; }
+        .result-box { background: var(--accent-light); padding: 10px 16px; border-radius: 8px; border-right: 4px solid var(--accent); margin: 8px 0 12px; font-weight: 600; color: var(--text); font-size: 0.95rem; }
+
+        .step-guide { background: var(--step-bg); border-right: 4px solid var(--step-border); padding: 16px 20px; border-radius: var(--radius); margin: 12px 0 6px; font-size: 0.88rem; line-height: 2.2; text-align: justify; }
+        .step-guide strong { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .step-guide .step-item { padding: 4px 0; border-bottom: 1px solid var(--card-border); }
+        .step-guide .step-item:last-child { border-bottom: none; }
+        .step-guide .formula-inline { display: block; direction: ltr; text-align: left; font-family: 'Courier New', monospace; background: var(--input-bg); padding: 6px 12px; border-radius: 6px; margin: 4px 0 0 0; border: 1px solid var(--card-border); font-size: 0.9rem; color: var(--accent); font-weight: 600; white-space: nowrap; overflow-x: auto; }
+
+        .special-section { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--card-border); padding: 24px 28px; margin-top: 20px; box-shadow: var(--shadow); }
+        .special-section .intro { font-size: 0.95rem; line-height: 2.2; text-align: justify; margin-bottom: 20px; color: var(--text); }
+        .special-section .intro strong { color: var(--accent); }
+        .special-section h4 { color: var(--accent); font-size: 1rem; margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px; }
+        .special-section h4:first-child { margin-top: 0; }
+        .special-section ul { list-style: none; padding: 0; line-height: 2.2; text-align: justify; }
+        .special-section ul li { padding: 6px 0; border-bottom: 1px solid var(--card-border); font-size: 0.88rem; }
+        .special-section ul li:last-child { border-bottom: none; }
+        .special-section ul li strong { color: var(--accent); }
+        .special-section .example-code { background: var(--code-bg); padding: 10px 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 700; border: 1.5px solid var(--code-border); color: var(--code-text); direction: ltr; display: inline-block; margin: 4px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .special-section .example-desc { font-size: 0.85rem; color: var(--sub-color); margin-right: 6px; }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 90px;
+            left: 50px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(29,111,66,0.3);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(29,111,66,0.4);
+        }
+
+        /* ===== INSTALL BUTTON ===== */
+        .install-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Vazir', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--install-btn-text);
+            box-shadow: 0 4px 20px var(--install-btn-shadow);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: linear-gradient(
+            135deg, #1b5e20, #1f6a25, #3e8e4a, #546e7a
+            );
+            background-size: 300% 300%;
+            animation: gradientMove 2.5s ease-in-out infinite alternate, float 1.3s ease-in-out infinite;
+        }
+        .install-btn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .install-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 35px rgba(29, 111, 66, 0.5);
+            animation-play-state: paused;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .install-btn .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .install-btn .btn-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .cards-container { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .search-wrapper { flex: 1 1 100%; max-width: 100%; }
+        }
+        @media (max-width: 768px) {
+            .header { padding: 16px 18px 14px 14px; }
+            .header-title { font-size: 1.4rem; }
+            .header-title span { font-size: 0.65rem; padding: 1px 10px; }
+            .header-version { font-size: 0.75rem; }
+            .toolbar { padding: 8px 14px; gap: 6px; }
+            .search-wrapper { flex: 1 1 100%; max-width: 100%; order: 1; padding: 0; }
+            .search-box { height: 42px; font-size: 0.85rem; padding: 8px 38px 8px 12px; }
+            .dropdown-wrapper { order: 2; flex: 1 1 0; min-width: 0; }
+            .sort-wrapper { order: 3; flex: 1 1 0; min-width: 0; }
+            .view-wrapper { order: 4; flex: 1 1 0; min-width: 0; }
+            .dropdown-btn, .sort-btn, .view-group {
+                height: 42px;
+                font-size: 0.85rem;
+                padding: 0 12px 0 12px;
+                min-width: 0;
+                width: 100%;
+                justify-content: center;
+                border-radius: var(--radius);
+            }
+            .view-group { padding: 3px; }
+            .view-btn {
+                font-size: 1rem;
+                padding: 0 6px;
+                min-height: 32px;
+            }
+            .view-btn .icon-label {
+                display: none;
+            }
+            .dropdown-btn .arrow-icon, .sort-btn .arrow-icon {
+                left: 8px;
+                font-size: 0.65rem;
+            }
+            .dropdown-menu, .sort-menu { min-width: unset; width: auto; }
+            .dropdown-item, .sort-item { font-size: 0.9rem; padding: 8px 14px; }
+            .cards-container { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; padding: 0 12px; margin: 16px auto; }
+            .card { min-height: 100px; padding: 14px 10px 12px; padding-top: 28px; }
+            .card .en { font-size: 1.2rem; }
+            .card .fa { font-size: 0.9rem; }
+            .card-number { width: 30px; height: 30px; font-size: 0.85rem; top: -10px; right: -8px; }
+            .cards-container.compact-mode {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 8px;
+            }
+            .cards-container.compact-mode .card {
+                min-height: 70px;
+                padding: 10px 6px 8px;
+                padding-top: 22px;
+            }
+            .cards-container.compact-mode .card .en {
+                font-size: 0.85rem;
+            }
+            .cards-container.compact-mode .card .fa {
+                font-size: 0.7rem;
+            }
+            .cards-container.compact-mode .card .card-number {
+                width: 22px;
+                height: 22px;
+                font-size: 0.6rem;
+                top: -8px;
+                right: -6px;
+            }
+            .detail-page { padding: 0 12px 40px; margin: 12px auto; }
+            .detail-header .header-inner { padding: 16px 18px; flex-direction: column; align-items: flex-start; gap: 4px; }
+            .detail-header .header-inner .en { font-size: 1.2rem; }
+            .detail-header .header-inner .fa { font-size: 0.9rem; }
+            .detail-desc { padding: 14px 16px; font-size: 0.88rem; }
+            .arg-table { font-size: 0.85rem; min-width: 300px; }
+            .arg-table th, .arg-table td { padding: 8px 12px; }
+            .arg-notes { font-size: 0.82rem; padding: 12px 14px; }
+            .formula-box { font-size: 1rem; padding: 10px 14px; }
+            .step-guide { font-size: 0.82rem; padding: 12px 14px; }
+            .excel-table { font-size: 0.8rem; }
+            .excel-table th, .excel-table td { padding: 4px 8px; min-width: 30px; }
+            .special-section { padding: 14px 16px; }
+            .back-to-top { width: 40px; height: 40px; font-size: 1.5rem; bottom: 80px; left: 50px; }
+            .install-btn {
+                padding: 12px 18px;
+                font-size: 0.85rem;
+                gap: 10px;
+                bottom: 30px;
+                left: 50px;
+                border-radius: 12px;
+            }
+            .install-btn .btn-icon { width: 28px; height: 28px; }
+            .install-btn .btn-icon svg { width: 20px; height: 20px; }
+            .cards-container.list-mode .card {
+                padding: 10px 14px;
+                min-height: 44px;
+                gap: 10px;
+            }
+            .cards-container.list-mode .card .card-number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+            .cards-container.list-mode .card .en {
+                font-size: 0.9rem;
+            }
+            .cards-container.list-mode .card .fa {
+                font-size: 0.8rem;
+            }
+            /* ===== سایز ویژه در موبایل ===== */
+            .card .badge.special { font-size: 0.65rem; padding: 2px 10px; }
+        }
+        @media (max-width: 480px) {
+            .header-title { font-size: 1.1rem; }
+            .header-title span { display: none; }
+            .header-version { font-size: 0.65rem; }
+            .header { padding: 12px 14px 10px 10px; }
+            .toolbar { padding: 6px 10px; gap: 4px; }
+            .search-wrapper { flex: 1 1 100%; max-width: 100%; order: 1; padding: 0; }
+            .search-box { height: 36px; font-size: 0.75rem; padding: 6px 32px 6px 10px; }
+            .dropdown-wrapper { order: 2; flex: 1 1 0; min-width: 0; margin-left: 4px; }
+            .sort-wrapper { order: 3; flex: 1 1 0; min-width: 0; margin-left: 4px; }
+            .view-wrapper { order: 4; flex: 1 1 0; min-width: 0; margin-left: 4px; }
+            .dropdown-btn, .sort-btn, .view-group {
+                height: 36px;
+                font-size: 0.75rem;
+                padding: 0 8px 0 8px;
+                min-width: 0;
+                width: 100%;
+                justify-content: center;
+                border-radius: var(--radius);
+            }
+            .view-group { padding: 2px; gap: 2px; }
+            .view-btn {
+                font-size: 0.9rem;
+                padding: 0 4px;
+                min-height: 28px;
+                border-radius: calc(var(--radius) - 6px);
+            }
+            .view-btn .icon-label {
+                display: none;
+            }
+            .dropdown-btn .arrow-icon, .sort-btn .arrow-icon {
+                left: 6px;
+                font-size: 0.6rem;
+            }
+            .dropdown-menu, .sort-menu { min-width: unset; width: auto; }
+            .dropdown-item, .sort-item { font-size: 0.8rem; padding: 6px 12px; }
+            .cards-container { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 0 8px; margin: 12px auto; }
+            .card { min-height: 80px; padding: 8px 6px 8px; padding-top: 22px; border-radius: 10px; }
+            .card .en { font-size: 1rem; }
+            .card .fa { font-size: 0.75rem; }
+            .card-number { width: 24px; height: 24px; font-size: 0.7rem; top: -8px; right: -5px; border-width: 2px; }
+            .card .separator { width: 20%; height: 1.5px; margin: 4px auto; }
+            .cards-container.compact-mode {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .cards-container.compact-mode .card {
+                min-height: 60px;
+                padding: 6px 4px 6px;
+                padding-top: 18px;
+            }
+            .cards-container.compact-mode .card .en {
+                font-size: 0.8rem;
+            }
+            .cards-container.compact-mode .card .fa {
+                font-size: 0.65rem;
+            }
+            .cards-container.compact-mode .card .card-number {
+                width: 18px;
+                height: 18px;
+                font-size: 0.5rem;
+                top: -6px;
+                right: -4px;
+                border-width: 2px;
+            }
+            .detail-header .header-inner .en { font-size: 1rem; }
+            .detail-header .header-inner .fa { font-size: 0.8rem; }
+            .detail-desc { font-size: 0.8rem; padding: 10px 12px; }
+            .arg-table { font-size: 0.7rem; min-width: 200px; }
+            .arg-table th, .arg-table td { padding: 4px 6px; }
+            .formula-box { font-size: 0.85rem; padding: 6px 10px; }
+            .no-result .icon { font-size: 2rem; }
+            .back-to-top { width: 36px; height: 36px; font-size: 1.3rem; bottom: 72px; left: 50px; }
+            .install-btn {
+                padding: 10px 16px;
+                font-size: 0.75rem;
+                gap: 8px;
+                bottom: 30px;
+                left: 50px;
+                border-radius: 10px;
+            }
+            .install-btn .btn-icon { width: 24px; height: 24px; }
+            .install-btn .btn-icon svg { width: 18px; height: 18px; }
+            .cards-container.list-mode .card {
+                padding: 8px 10px;
+                min-height: 36px;
+                gap: 8px;
+            }
+            .cards-container.list-mode .card .card-number {
+                width: 20px;
+                height: 20px;
+                font-size: 0.6rem;
+            }
+            .cards-container.list-mode .card .en {
+                font-size: 0.8rem;
+            }
+            .cards-container.list-mode .card .fa {
+                font-size: 0.7rem;
+            }
+            /* ===== سایز ویژه در موبایل کوچک ===== */
+            .card .badge.special { font-size: 0.55rem; padding: 2px 8px; }
+        }
+
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="mainHeader" role="banner">
+        <div class="header-left">
+            <div class="header-title">آموزش توابع پرکاربرد اکسل <span>Excel Functions</span></div>
+            <div class="header-version">نگارش ۲.۶.۵</div>
+        </div>
+        <div class="header-controls">
+            <div class="theme-toggle" id="themeToggle" role="button" tabindex="0" aria-label="تغییر تم" aria-pressed="false"></div>
+        </div>
+    </header>
+
+    <div class="toolbar" id="mainToolbar" role="search" aria-label="جستجو و فیلتر توابع">
+        <div class="search-wrapper">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" class="search-box" id="searchInput" placeholder="جستجوی تابع ..." autocomplete="off" aria-label="جستجوی توابع" dir="auto">
+        </div>
+        <div class="dropdown-wrapper">
+            <button class="dropdown-btn" id="dropdownBtn" aria-haspopup="true" aria-expanded="false" aria-label="انتخاب دسته‌بندی">همه <span class="arrow-icon" aria-hidden="true">▼</span></button>
+            <!-- ===== تغییر: ترتیب منو بر اساس لیست دلخواه ===== -->
+            <div class="dropdown-menu" id="dropdownMenu" role="menu">
+                <div class="dropdown-item active" data-cat="all" role="menuitem">همه</div>
+                <div class="dropdown-item" data-cat="جستجو" role="menuitem">جستجو</div>
+                <div class="dropdown-item" data-cat="آرایه‌ای و پویا" role="menuitem">آرایه‌ای و پویا</div>
+                <div class="dropdown-item" data-cat="شرطی و منطقی" role="menuitem">شرطی و منطقی</div>
+                <div class="dropdown-item" data-cat="متنی" role="menuitem">متنی</div>
+                <div class="dropdown-item" data-cat="ریاضی" role="menuitem">ریاضی</div>
+                <div class="dropdown-item" data-cat="تاریخ و زمان" role="menuitem">تاریخ و زمان</div>
+                <div class="dropdown-item" data-cat="پایگاه داده" role="menuitem">پایگاه داده</div>
+                <div class="dropdown-item" data-cat="سایر" role="menuitem">سایر</div>
+                <div class="dropdown-item" data-cat="فرمت سل" role="menuitem">فرمت سل</div>
+            </div>
+        </div>
+        <div class="sort-wrapper">
+            <button class="sort-btn" id="sortBtn" aria-haspopup="true" aria-expanded="false" aria-label="مرتب‌سازی">دسته‌بندی <span class="arrow-icon" aria-hidden="true">▼</span></button>
+            <div class="sort-menu" id="sortMenu" role="menu">
+                <div class="sort-item active" data-sort="category" role="menuitem"> ترتیب نمایش</div>
+                <div class="sort-item" data-sort="az" role="menuitem">🔤 الفبا (صعودی)</div>
+                <div class="sort-item" data-sort="za" role="menuitem">🔤 الفبا (نزولی)</div>
+                <div class="sort-item" data-sort="popularity" role="menuitem">🔥 محبوبیت</div>
+            </div>
+        </div>
+        <div class="view-wrapper" id="viewWrapper">
+            <div class="view-group" id="viewGroup" role="group" aria-label="حالت نمایش">
+                <button class="view-btn active" data-view="grid" aria-label="حالت کارتی" title="حالت کارتی">
+                    <span>▦</span>
+                    <span class="icon-label">کارتی</span>
+                </button>
+                <button class="view-btn" data-view="list" aria-label="حالت لیستی" title="حالت لیستی">
+                    <span>☰</span>
+                    <span class="icon-label">لیستی</span>
+                </button>
+                <button class="view-btn" data-view="compact" id="compactViewBtn" aria-label="حالت فشرده" title="حالت فشرده">
+                    <span>⊞</span>
+                    <span class="icon-label">فشرده</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cards-container" id="cardsContainer" role="list"></div>
+    <div class="detail-page" id="detailPage" role="main"></div>
+
+    <!-- Install Button -->
+    <button class="install-btn" id="installBtn" style="display:none;">
+        <span class="btn-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        </span>
+        نصب برنامه
+    </button>
+
+    <button class="back-to-top" id="backToTop" aria-label="بازگشت به بالای صفحه" title="بازگشت به بالا">↑</button>
+
+    <script src="./data.js"></script>
+    <script>
+    'use strict';
+
+    const APP_VERSION = '۲.۶.۵';
+
+    // ============================================================
+    // DATA - از فایل data.js بارگذاری می‌شود
+    // ============================================================
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    const state = {
+        theme: 'professional',
+        detailId: null,
+        category: 'all',
+        searchQuery: '',
+        sortBy: 'category',
+        searchDebounce: null,
+        viewMode: 'grid'
+    };
+
+    // ============================================================
+    // DOM REFS
+    // ============================================================
+    const cardsContainer = document.getElementById('cardsContainer');
+    const detailPage = document.getElementById('detailPage');
+    const searchInput = document.getElementById('searchInput');
+    const themeToggle = document.getElementById('themeToggle');
+    const dropdownBtn = document.getElementById('dropdownBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const sortBtn = document.getElementById('sortBtn');
+    const sortMenu = document.getElementById('sortMenu');
+    const backToTop = document.getElementById('backToTop');
+    const viewGroup = document.getElementById('viewGroup');
+    const viewBtns = viewGroup.querySelectorAll('.view-btn');
+    const compactViewBtn = document.getElementById('compactViewBtn');
+    const installBtn = document.getElementById('installBtn');
+
+    // ============================================================
+    // TOOLBAR STICKY FIX
+    // ============================================================
+    function fixToolbarPosition() {
+        const header = document.getElementById('mainHeader');
+        const toolbar = document.getElementById('mainToolbar');
+        if (header && toolbar) {
+            const headerHeight = header.offsetHeight;
+            toolbar.style.top = headerHeight + 'px';
+        }
+    }
+
+    window.addEventListener('load', fixToolbarPosition);
+    window.addEventListener('resize', fixToolbarPosition);
+    window.addEventListener('orientationchange', function() {
+        setTimeout(fixToolbarPosition, 300);
+    });
+
+    // ============================================================
+    // THEME
+    // ============================================================
+    function setTheme(theme) {
+        state.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('excel-theme', theme);
+        themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    }
+    function toggleTheme() {
+        setTheme(state.theme === 'professional' ? 'dark' : 'professional');
+    }
+    function initTheme() {
+        const saved = localStorage.getItem('excel-theme');
+        if (saved) { setTheme(saved); return; }
+        setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'professional');
+    }
+
+    // ============================================================
+    // UTILITY
+    // ============================================================
+    function normalize(str) {
+        if (!str) return '';
+        const persianNumbers = '۰۱۲۳۴۵۶۷۸۹';
+        const englishNumbers = '0123456789';
+        let result = str;
+        for (let i = 0; i < 10; i++) {
+            result = result.replace(new RegExp(persianNumbers[i], 'g'), englishNumbers[i]);
+        }
+        return result.replace(/[يى]/g, 'ی').replace(/[ك]/g, 'ک').replace(/[ٱآا]/g, 'ا').replace(/[ة]/g, 'ه').replace(/[ئ]/g, 'ی').toLowerCase();
+    }
+
+    function getCategoryCounts() {
+        const counts = {};
+        functionsData.forEach(fn => { counts[fn.category] = (counts[fn.category] || 0) + 1; });
+        return counts;
+    }
+
+    function trackClick(functionId) {
+        try {
+            let stats = JSON.parse(localStorage.getItem('excel_function_stats') || '{}');
+            stats[functionId] = (stats[functionId] || 0) + 1;
+            localStorage.setItem('excel_function_stats', JSON.stringify(stats));
+        } catch (e) {}
+    }
+
+    function getPopularityStats() {
+        try {
+            return JSON.parse(localStorage.getItem('excel_function_stats') || '{}');
+        } catch {
+            return {};
+        }
+    }
+
+    // ============================================================
+    // SORT FUNCTIONS با ترتیب دلخواه
+    // ============================================================
+    function sortFunctions(data) {
+        const sorted = [...data];
+        const formatCells = [];
+        const others = [];
+        sorted.forEach(item => {
+            if (item.id === 'format_cells') {
+                formatCells.push(item);
+            } else {
+                others.push(item);
+            }
+        });
+
+        let sortedOthers;
+        switch (state.sortBy) {
+            case 'az':
+                sortedOthers = others.sort((a, b) => a.en.localeCompare(b.en));
+                break;
+            case 'za':
+                sortedOthers = others.sort((a, b) => b.en.localeCompare(a.en));
+                break;
+            case 'popularity': {
+                const stats = getPopularityStats();
+                sortedOthers = others.sort((a, b) => (stats[b.id] || 0) - (stats[a.id] || 0));
+                break;
+            }
+            case 'category':
+            default:
+                // ===== تغییر: ترتیب دلخواه دسته‌بندی‌ها =====
+                const categoryOrder = [
+                    'جستجو',
+                    'آرایه‌ای و پویا',
+                    'شرطی و منطقی',
+                    'متنی',
+                    'ریاضی',
+                    'تاریخ و زمان',
+                    'پایگاه داده',
+                    'سایر',
+                    'فرمت سل'
+                ];
+                sortedOthers = others.sort((a, b) => {
+                    const indexA = categoryOrder.indexOf(a.category);
+                    const indexB = categoryOrder.indexOf(b.category);
+                    if (indexA === -1) return 1;
+                    if (indexB === -1) return -1;
+                    if (indexA !== indexB) return indexA - indexB;
+                    return a.en.localeCompare(b.en);
+                });
+                break;
+        }
+
+        return [...sortedOthers, ...formatCells];
+    }
+
+    // ============================================================
+    // VIEW MODE
+    // ============================================================
+    function setViewMode(mode) {
+        state.viewMode = mode;
+        cardsContainer.classList.remove('list-mode', 'compact-mode');
+        if (mode === 'list') {
+            cardsContainer.classList.add('list-mode');
+        } else if (mode === 'compact') {
+            cardsContainer.classList.add('compact-mode');
+        }
+        viewBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === mode);
+        });
+        localStorage.setItem('excel-view-mode', mode);
+        renderCards();
+    }
+
+    function initViewMode() {
+        const saved = localStorage.getItem('excel-view-mode');
+        let mode = saved || 'grid';
+        if (window.innerWidth <= 768 && mode === 'compact') {
+            mode = 'grid';
+        }
+        setViewMode(mode);
+    }
+
+    function handleViewButtons() {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            compactViewBtn.style.display = 'none';
+            if (state.viewMode === 'compact') {
+                setViewMode('grid');
+            }
+        } else {
+            compactViewBtn.style.display = 'flex';
+        }
+    }
+
+    // ============================================================
+    // RENDER CARDS
+    // ============================================================
+    function renderCards() {
+        const q = normalize(state.searchQuery);
+        const category = state.category;
+
+        let filtered = functionsData.filter(fn => {
+            return (category === 'all' || fn.category === category) &&
+                   (q === '' || normalize(fn.en).includes(q) || normalize(fn.fa).includes(q));
+        });
+
+        filtered = sortFunctions(filtered);
+
+        if (filtered.length === 0) {
+            cardsContainer.innerHTML = `<div class="no-result"><span class="icon">🔍</span> نتیجه‌ای یافت نشد<div class="suggestion">سعی کنید عبارت دیگری را جستجو کنید یا دسته‌بندی را تغییر دهید.</div></div>`;
+            cardsContainer.className = 'cards-container';
+            if (state.viewMode === 'list') cardsContainer.classList.add('list-mode');
+            else if (state.viewMode === 'compact') cardsContainer.classList.add('compact-mode');
+            return;
+        }
+
+        cardsContainer.className = 'cards-container';
+        if (state.viewMode === 'list') cardsContainer.classList.add('list-mode');
+        else if (state.viewMode === 'compact') cardsContainer.classList.add('compact-mode');
+
+        let html = '';
+        filtered.forEach((fn, index) => {
+            const number = index + 1;
+            const colorClass = `color-${(number % 8) + 1}`;
+            const isSpecial = fn.isSpecial || false;
+
+            html += `<div class="card" data-id="${fn.id}" data-special="${isSpecial}" role="button" tabindex="0" aria-label="${fn.en} - ${fn.fa}">
+                        <div class="card-number ${colorClass}">${number}</div>
+                        <div class="en">${fn.en}</div>
+                        <div class="separator"></div>
+                        <div class="fa">${fn.fa}</div>
+                        ${isSpecial ? '<div class="badge special">ویژه</div>' : ''}
+                    </div>`;
+        });
+
+        cardsContainer.innerHTML = html;
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                const id = this.dataset.id;
+                if (id) showDetail(id);
+            });
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+                    if (id) showDetail(id);
+                }
+            });
+        });
+    }
+
+    // ============================================================
+    // DETAIL
+    // ============================================================
+    function showDetail(id) {
+        const fn = functionsData.find(d => d.id === id);
+        if (!fn) {
+            console.error('Function not found:', id);
+            return;
+        }
+
+        trackClick(id);
+
+        state.detailId = id;
+        cardsContainer.classList.add('hidden');
+        detailPage.classList.add('active');
+
+        document.getElementById('mainHeader').style.display = 'none';
+        document.getElementById('mainToolbar').style.display = 'none';
+
+        detailPage.innerHTML = buildDetailHTML(fn);
+        window.scrollTo(0, 0);
+        window.history.pushState({ detail: id }, '');
+    }
+
+    function goHome() {
+        cardsContainer.classList.remove('hidden');
+        detailPage.classList.remove('active');
+        detailPage.innerHTML = '';
+        state.detailId = null;
+        document.getElementById('mainHeader').style.display = 'flex';
+        document.getElementById('mainToolbar').style.display = 'flex';
+        setTimeout(fixToolbarPosition, 50);
+        window.history.pushState({}, '');
+        window.scrollTo(0, 0);
+        renderCards();
+    }
+
+    function buildDetailHTML(fn) {
+        let argsTable = '';
+        if (fn.args && fn.args.length > 0) {
+            argsTable = `<div class="arg-table-wrap"><table class="arg-table"><thead><tr><th>#</th><th>نام آرگومان</th><th>چه چیزی وارد شود؟</th></tr></thead><tbody>
+                ${fn.args.map((arg, idx) => {
+                    const isOptional = ['if_not_found','match_mode','search_mode','range_lookup','by_col','sort_order','sort_index','exactly_once','ignore_empty','start_num','return_type','instance_num','options','number2','ref2','criteria_range2','criteria2','columns','min','max','integer','friendly_name'].some(k => arg.name.includes(k));
+                    const qText = isOptional ? `${arg.q} (اختیاری)` : arg.q;
+                    return `<tr><td>${idx+1}</td><td><span class="latin">${arg.name}</span></td><td>${qText}</td></tr>`;
+                }).join('')}
+            </tbody></table></div>`;
+        }
+
+        let argNotesHtml = '';
+        if (fn.argNotes && fn.argNotes.length > 0) {
+            argNotesHtml = `<div class="arg-notes">${fn.argNotes.map((note, index) => `<div class="note-item"><strong>${index+1}.</strong> ${note.replace(/\n/g, '<br>')}</div>`).join('')}</div>`;
+        }
+
+        let exampleHtml = '';
+        const examplesList = fn.examples || (fn.example ? [fn.example] : []);
+
+        if (examplesList.length > 0) {
+            exampleHtml = examplesList.map((ex, index) => {
+                let tableHtml = '';
+                if (ex.table && ex.table.rows && ex.table.rows.length > 0) {
+                    const rows = ex.table.rows;
+                    const headers = ex.table.headers || [];
+                    const letters = headers.map((_, i) => String.fromCharCode(65 + i));
+
+                    tableHtml = `<div class="excel-table-wrap"><table class="excel-table">
+        <thead>
+            <tr class="hash-row">
+                <th class="col-header">#</th>
+                ${letters.map(l => `<th class="col-header">${l}</th>`).join('')}
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="title-row">
+                <td class="row-header" style="background: var(--table-header); color: var(--table-header-text); font-weight: 700;">1</td>
+                ${headers.map(h => `<td class="data-header" style="background: var(--data-header-bg); color: var(--data-header-text); font-weight: 700;">${h}</td>`).join('')}
+            </tr>
+            ${rows.map((row, index) => `<tr><td class="row-header">${index + 2}</td>${row.slice(1).map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}
+        </tbody>
+    </table></div>`;
+                }
+
+                let stepsHtml = '';
+                if (ex.steps && ex.steps.length > 0) {
+                    let stepCounter = 0;
+                    stepsHtml = `<div class="step-guide">${ex.steps.map(step => {
+                        const isFormula = step.trim().startsWith('=');
+                        if (isFormula) {
+                            return `<div class="step-item"><div class="formula-inline">${step}</div></div>`;
+                        } else {
+                            stepCounter++;
+                            return `<div class="step-item"><strong>مرحله ${stepCounter}:</strong> ${step}</div>`;
+                        }
+                    }).join('')}</div>`;
+                }
+
+                return `<div class="example-wrap"><div class="example-trigger"><span>📌 ${ex.title}</span></div>
+                        <div class="example-body">${tableHtml}<div class="formula-box" style="white-space: nowrap; overflow-x: auto; direction: ltr; text-align: left;">${ex.formula}</div><div class="result-box">${ex.result}</div>${stepsHtml}</div></div>`;
+            }).join('');
+        }
+
+        let specialHtml = '';
+        if (fn.isSpecial && fn.customFormats) {
+            let categoriesHtml = '';
+            let hasBaseCategory = false;
+
+            fn.customFormats.categories.forEach((cat, catIndex) => {
+                const isBaseCategory = cat.examples && cat.examples.length > 0 && !cat.examples[0].hasOwnProperty('input');
+
+                if (isBaseCategory) {
+                    hasBaseCategory = true;
+                    let baseItemsHtml = cat.examples.map(ex =>
+                        `<li><strong>${ex.code}</strong> : ${ex.description}</li>`
+                    ).join('');
+
+                    categoriesHtml += `
+                        <div style="margin-top: 20px;">
+                            <h4 style="color: var(--accent); font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">${cat.name}</h4>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2;">
+                                ${baseItemsHtml}
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    let rowsHtml = cat.examples.map(ex => {
+                        let codeDisplay = ex.code;
+                        if (!codeDisplay.includes('<span')) {
+                            codeDisplay = `<span dir="ltr">${ex.code}</span>`;
+                        }
+
+                        return `
+                            <tr>
+                                <td style="font-family: 'Courier New', monospace; direction: ltr; text-align: left; white-space: nowrap; padding: 8px 12px; border-bottom: 1px solid var(--card-border);">${codeDisplay}</td>
+                                <td style="padding: 8px 12px; border-bottom: 1px solid var(--card-border);">${ex.description}</td>
+                                <td style="font-family: 'Courier New', monospace; direction: ltr; text-align: right; padding: 8px 12px; border-bottom: 1px solid var(--card-border);">${ex.input || ''}</td>
+                                <td style="font-family: 'Courier New', monospace; direction: ltr; text-align: right; padding: 8px 12px; border-bottom: 1px solid var(--card-border);">${ex.output || ''}</td>
+                            </tr>
+                        `;
+                    }).join('');
+
+                    categoriesHtml += `
+                        <div style="margin-top: 24px;">
+                            <h4 style="color: var(--accent); font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">${cat.name}</h4>
+                            <div class="arg-table-wrap" style="overflow-x: auto;">
+                                <table class="arg-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 500px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="background: var(--table-header); color: var(--table-header-text); text-align: right; padding: 10px 12px; font-weight: 700; border-bottom: 2px solid var(--card-border); white-space: nowrap;">کد فرمت</th>
+                                            <th style="background: var(--table-header); color: var(--table-header-text); text-align: right; padding: 10px 12px; font-weight: 700; border-bottom: 2px solid var(--card-border); white-space: nowrap;">توضیح</th>
+                                            <th style="background: var(--table-header); color: var(--table-header-text); text-align: right; padding: 10px 12px; font-weight: 700; border-bottom: 2px solid var(--card-border); white-space: nowrap;">ورودی</th>
+                                            <th style="background: var(--table-header); color: var(--table-header-text); text-align: right; padding: 10px 12px; font-weight: 700; border-bottom: 2px solid var(--card-border); white-space: nowrap;">خروجی</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${rowsHtml}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            specialHtml = `<div class="special-section">
+                <div class="intro"><strong>فرمت سل</strong> یکی از ابزارهای قدرتمند اکسل است که به شما اجازه می‌دهد ظاهر سلول‌ها را دقیقاً مطابق با نیاز خود تغییر دهید.</div>
+                <h4>📘 بخش‌های اصلی فرمت سل:</h4>
+                <ul>
+                    <li><strong>Number (عدد):</strong> تعیین نوع داده (عدد، تاریخ، درصد، کسر، علمی و ...).</li>
+                    <li><strong>Alignment (هم‌ترازی):</strong> نحوه چینش متن در سلول (راست، چپ، وسط، تورفتگی و ...).</li>
+                    <li><strong>Font (قلم):</strong> نوع، اندازه، رنگ و استایل قلم.</li>
+                    <li><strong>Border (حاشیه):</strong> اضافه کردن حاشیه به دور سلول‌ها.</li>
+                    <li><strong>Fill (پر کردن):</strong> رنگ پس‌زمینه سلول یا افکت‌های گرادیان.</li>
+                    <li><strong>Protection (محافظت):</strong> قفل یا مخفی کردن سلول‌ها.</li>
+                </ul>
+                <h4>💙 بخش Custom (سفارشی) – قلب فرمت سل</h4>
+                ${categoriesHtml}
+            </div>`;
+        }
+
+        return `<div class="detail-header">
+                    <div class="header-inner">
+                        <div class="fa">${fn.fa}</div>
+                        <div class="en">${fn.en}</div>
+                    </div>
+                    <div class="header-body">
+                        <div class="sub">📂 دسته‌بندی: ${fn.category}</div>
+                    </div>
+                </div>
+                <div class="detail-desc">${fn.desc}</div>
+                ${fn.isSpecial ? specialHtml : `
+                    ${fn.args && fn.args.length > 0 ? '<div class="section-title"><span class="emoji">📋</span> آرگومان‌ها</div>' : ''}
+                    ${argsTable}
+                    ${fn.argNotes && fn.argNotes.length > 0 ? '<div class="section-title"><span class="emoji">📌</span> نکات تکمیلی</div>' : ''}
+                    ${argNotesHtml}
+                    ${examplesList.length > 0 ? '<div class="section-title"><span class="emoji">🧪</span> مثال‌ها</div>' : ''}
+                    ${exampleHtml}
+                `}`;
+    }
+
+    // ============================================================
+    // DROPDOWN
+    // ============================================================
+    function updateDropdownLabel() {
+        const items = dropdownMenu.querySelectorAll('.dropdown-item');
+        let activeLabel = 'همه';
+        let activeItem = dropdownMenu.querySelector('.dropdown-item.active');
+        if (activeItem) {
+            activeLabel = activeItem.textContent.replace(/[0-9۰-۹]/g, '').trim();
+        }
+        dropdownBtn.innerHTML = `${activeLabel} <span class="arrow-icon" aria-hidden="true">▼</span>`;
+    }
+
+    function updateDropdownCounts() {
+        const counts = getCategoryCounts();
+        const total = functionsData.length;
+
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            const cat = item.dataset.cat;
+            let countSpan = item.querySelector('.count');
+            if (!countSpan) {
+                countSpan = document.createElement('span');
+                countSpan.className = 'count';
+                item.appendChild(countSpan);
+            }
+            if (cat === 'all') {
+                countSpan.textContent = total;
+            } else if (cat && counts[cat]) {
+                countSpan.textContent = counts[cat];
+            } else {
+                countSpan.textContent = '0';
+            }
+        });
+    }
+
+    function closeAllMenus() {
+        dropdownMenu.classList.remove('open');
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+        sortMenu.classList.remove('open');
+        sortBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    dropdownBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (sortMenu.classList.contains('open')) {
+            sortMenu.classList.remove('open');
+            sortBtn.setAttribute('aria-expanded', 'false');
+        }
+        const isOpen = dropdownMenu.classList.toggle('open');
+        this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (isOpen) {
+            updateDropdownCounts();
+        }
+    });
+
+    sortBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (dropdownMenu.classList.contains('open')) {
+            dropdownMenu.classList.remove('open');
+            dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+        const isOpen = sortMenu.classList.toggle('open');
+        this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown-wrapper') && !e.target.closest('.sort-wrapper')) {
+            closeAllMenus();
+        }
+    });
+
+    dropdownMenu.addEventListener('click', function(e) {
+        const item = e.target.closest('.dropdown-item');
+        if (!item) return;
+        const cat = item.dataset.cat;
+        dropdownMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        state.category = cat;
+        updateDropdownLabel();
+        closeAllMenus();
+        if (!state.detailId) renderCards();
+    });
+
+    sortMenu.addEventListener('click', function(e) {
+        const item = e.target.closest('.sort-item');
+        if (!item) return;
+        const sortType = item.dataset.sort;
+        sortMenu.querySelectorAll('.sort-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        state.sortBy = sortType;
+        updateSortLabel();
+        closeAllMenus();
+        if (!state.detailId) renderCards();
+    });
+
+    // ============================================================
+    // SORT
+    // ============================================================
+    function updateSortLabel() {
+        const items = sortMenu.querySelectorAll('.sort-item');
+        let activeLabel = 'دسته‌بندی';
+        items.forEach(item => { if (item.classList.contains('active')) activeLabel = item.textContent.trim(); });
+        sortBtn.innerHTML = `${activeLabel} <span class="arrow-icon" aria-hidden="true">▼</span>`;
+    }
+
+    // ============================================================
+    // SEARCH
+    // ============================================================
+    searchInput.addEventListener('input', function() {
+        clearTimeout(state.searchDebounce);
+        state.searchDebounce = setTimeout(() => {
+            state.searchQuery = this.value;
+            if (!state.detailId) renderCards();
+        }, 300);
+    });
+
+    // ============================================================
+    // VIEW TOGGLE
+    // ============================================================
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const mode = this.dataset.view;
+            if (window.innerWidth <= 768 && mode === 'compact') return;
+            setViewMode(mode);
+        });
+    });
+
+    // ============================================================
+    // BACK TO TOP
+    // ============================================================
+    window.addEventListener('scroll', function() {
+        backToTop.classList.toggle('visible', window.scrollY > 400);
+    });
+
+    backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    backToTop.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    });
+
+    // ============================================================
+    // POPSTATE
+    // ============================================================
+    window.addEventListener('popstate', function() { if (state.detailId) goHome(); });
+
+    // ============================================================
+    // THEME TOGGLE
+    // ============================================================
+    themeToggle.addEventListener('click', toggleTheme);
+    themeToggle.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTheme(); }
+    });
+
+    // ============================================================
+    // PWA - INSTALL BUTTON
+    // ============================================================
+    let deferredPrompt = null;
+    let installTimer = null;
+
+    window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallButton();
+    });
+
+    function showInstallButton() {
+        installBtn.style.display = 'flex';
+        setTimeout(function() {
+            installBtn.classList.add('show');
+        }, 100);
+        installTimer = setTimeout(function() {
+            hideInstallButton();
+        }, 7000);
+    }
+
+    installBtn.addEventListener('click', async function() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const result = await deferredPrompt.userChoice;
+            if (result.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+                hideInstallButton();
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        }
+    });
+
+    function hideInstallButton() {
+        installBtn.classList.remove('show');
+        setTimeout(function() {
+            installBtn.style.display = 'none';
+        }, 500);
+        if (installTimer) {
+            clearTimeout(installTimer);
+            installTimer = null;
+        }
+    }
+
+    window.addEventListener('appinstalled', function() {
+        hideInstallButton();
+    });
+
+    // ============================================================
+    // SERVICE WORKER REGISTRATION
+    // ============================================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('./sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful');
+                })
+                .catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    function init() {
+        initTheme();
+        handleViewButtons();
+        initViewMode();
+        renderCards();
+        updateDropdownLabel();
+        updateSortLabel();
+        themeToggle.setAttribute('aria-pressed', state.theme === 'dark' ? 'true' : 'false');
+        setTimeout(fixToolbarPosition, 100);
+        window.addEventListener('resize', handleViewButtons);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
